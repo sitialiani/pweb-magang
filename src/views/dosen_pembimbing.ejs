@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Bimbingan</title>
+    
+    <link href="/css/style.css" rel="stylesheet">
+    
+</head>
+<body class="bg-content-bg">
+
+    <div class="flex min-h-screen">
+        <!-- =============== Sidebar Admin =============== -->
+        <aside class="w-72 bg-sidebar-bg text-white flex flex-col p-4 fixed h-full shadow-lg">
+            <!-- Profile Photo & Info Admin -->
+            <div class="text-center py-4 border-b border-white/20">
+                <img src="https://placehold.co/100x100/E7EEF0/5c7a89?text=Admin" alt="Foto Profil Admin" class="rounded-lg w-24 h-24 mx-auto mb-3 border-4 border-white/30">
+                <h3 class="font-bold text-lg">Admin Jurusan</h3>
+                <p class="text-sm">Sistem Informasi</p>
+            </div>
+
+            <!-- Navigation Links Admin -->
+            <nav class="mt-6 flex-grow overflow-y-auto pr-2">
+                <ul class="space-y-1 pb-4">
+                    <li><a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-sidebar-hover transition-colors duration-200"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a></li>
+                                        
+                    <!-- Menu Dropdown: Proses Magang (Aktif & Terbuka) -->
+                    <li>
+                        <button class="w-full flex justify-between items-center px-4 py-3 bg-sidebar-active font-semibold shadow-inner rounded-md" data-menu="proses-magang">
+                            <span class="flex items-center gap-3"><i data-lucide="case-sensitive" class="w-5 h-5"></i> Proses Magang</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 rotate-180 transition-transform duration-300"></i>
+                        </button>
+                        <div id="proses-magang" class="pl-8 pt-1 space-y-1">
+                            <a href="/admin/pengajuan-magang" class="block px-4 py-2.5 rounded-md hover:bg-sidebar-hover text-sm">Pengajuan Magang</a>
+                            <a href="/admin/progress-magang" class="block px-4 py-2.5 rounded-md hover:bg-sidebar-hover text-sm">Progress Magang</a>
+                            <a href="/admin/dosen-pembimbing" class="block px-4 py-2.5 rounded-md bg-sidebar-hover text-sm font-bold">Dosen Pembimbing</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="mt-auto pt-4 border-t border-white/20">
+                <a href="/logout" class="flex items-center gap-3 w-fit mx-auto px-6 py-2.5 rounded-md bg-red-600/80 hover:bg-red-700/80 transition-colors duration-200">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- =============== Main Content =============== -->
+        <main class="ml-72 flex-1 p-8 overflow-y-auto">
+            <header class="flex justify-between items-center mb-8">
+                 <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Manajemen Pembimbingan Magang</h1>
+                    <p class="text-gray-600">Kelola alokasi dosen pembimbing dan mahasiswa bimbingan.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="font-semibold text-gray-800">Admin Jurusan</p>
+                        <p class="text-sm text-gray-500">Online</p>
+                    </div>
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow">
+                        <i data-lucide="shield-check" class="text-gray-600"></i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Kartu Ringkasan Statistik -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-md flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center"><i data-lucide="user-cog" class="w-6 h-6 text-teal-600"></i></div>
+                    <div>
+                        <p class="text-gray-500 text-sm">Total Dosen Aktif</p>
+                        <p class="text-2xl font-bold text-gray-800">12</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center"><i data-lucide="user-check" class="w-6 h-6 text-blue-600"></i></div>
+                    <div>
+                        <p class="text-gray-500 text-sm">Mhs. dgn Pembimbing</p>
+                        <p class="text-2xl font-bold text-gray-800">58</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center"><i data-lucide="user-x" class="w-6 h-6 text-red-600"></i></div>
+                    <div>
+                        <p class="text-gray-500 text-sm">Mhs. Tanpa Pembimbing</p>
+                        <p class="text-2xl font-bold text-gray-800">3</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center"><i data-lucide="bar-chart-2" class="w-6 h-6 text-indigo-600"></i></div>
+                    <div>
+                        <p class="text-gray-500 text-sm">Rata-rata Bimbingan</p>
+                        <p class="text-2xl font-bold text-gray-800">4.8</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bagian Search Bar (Ganti dengan ini) -->
+            <div class="bg-white p-4 rounded-lg shadow-md mb-8">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="relative flex-grow">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="Cari Dosen (Nama/NIDN) atau Mahasiswa..." 
+                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-md text-sm w-full focus:ring-blue-500 focus:border-blue-500"
+                >
+                <i data-lucide="search" class="w-4 h-4 absolute top-1/2 left-3 -translate-y-1/2 text-gray-400"></i>
+            </div>
+            <button     
+            id="search-btn" 
+            class="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold transition-colors shadow-sm"
+            >
+                <i data-lucide="search" class="w-5 h-5"></i>
+                    Cari
+            </button>
+        </div>
+    </div>
+            <!-- Daftar Dosen Pembimbing (Expandable) -->
+            <div class="space-y-4">
+                <% if (dosenList && dosenList.length > 0) { %>
+                    <% dosenList.forEach(dosen => { %>
+                        <div class="bg-white rounded-lg shadow-md mb-4" data-dosen-card>
+        <!-- Header Dosen -->
+        <button class="dropdown-toggle w-full flex items-center justify-between p-5 text-left" data-target="dosen-<%= dosen.id %>-details">
+            <div class="flex items-center gap-4">
+                <img src="https://placehold.co/48x48/E7EEF0/5c7a89?text=<%= dosen.nama.substring(0, 2).toUpperCase() %>" 
+                     class="w-12 h-12 rounded-full" 
+                     alt="Foto Dosen">
+                <div>
+                    <p class="font-bold text-gray-800" data-dosen-name><%= dosen.nama %></p>
+                    <p class="text-sm text-gray-500" data-dosen-nidn>NIDN: <%= dosen.nidn %></p>
+                </div>
+            </div>
+                                <div class="flex items-center gap-6">
+                                    <div class="text-right">
+                                        <p class="font-bold text-lg text-blue-600 mahasiswa-count"><%= dosen.mahasiswaBimbingan.length %></p> <!-- Tambahkan kelas mahasiswa-count -->
+                                        <p class="text-xs text-gray-500">Mahasiswa</p>
+                                    </div>
+                                        <i data-lucide="chevron-down" class="w-6 h-6 text-gray-400 transition-transform duration-300"></i>
+                                </div>
+                            </button>
+                            <div id="dosen-<%= dosen.id %>-details" class="hidden px-5 pb-5">
+                                <div class="border-t pt-4 overflow-x-auto">
+                                    <h4 class="font-semibold mb-2">Daftar Mahasiswa Bimbingan</h4>
+                                    <% if (dosen.mahasiswaBimbingan.length > 0) { %>
+                                        <table class="w-full text-sm">
+                                            <thead class="text-xs text-gray-500">
+                                                <tr>
+                                                    <th class="py-2 px-3 text-left">NIM</th>
+                                                    <th class="py-2 px-3 text-left">Nama Mahasiswa</th>
+                                                    <th class="py-2 px-3 text-left">Perusahaan</th>
+                                                    <th class="py-2 px-3 text-left">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% dosen.mahasiswaBimbingan.forEach(mahasiswa => { %>
+                                                <tr class="border-b">
+                                                    <td class="py-2 px-3"><%= mahasiswa.nim %></td>
+                                                    <td class="py-2 px-3"><a href="#" class="text-blue-600 hover:underline"><%= mahasiswa.nama %></a></td>
+                                                   <td class="py-2 px-3"><%= mahasiswa.pengajuanMagangs[0]?.lowongan?.perusahaan || 'N/A' %></td>
+                                                    <td class="py-2 px-3"><span class="px-2 py-1 text-xs font-bold text-green-800 bg-green-100 rounded-full">Aktif</span></td>
+                                                </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    <% } else { %>
+                                        <p class="text-center text-gray-500">Belum ada data mahasiswa bimbingan.</p>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-center text-gray-500 p-8">Tidak ada data dosen pembimbing yang ditemukan.</p>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+      <!-- ================== MODAL ALOKASI PEMBIMBING ================== -->
+    <div id="alokasi-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden justify-center items-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md m-4">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 class="text-xl font-bold text-gray-800">Alokasikan Pembimbing</h3>
+                <button id="close-alokasi-modal-btn" class="text-gray-400 hover:text-gray-600">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-6">
+                <!-- PERUBAHAN: Form action dan method ditambahkan -->
+                <form id="alokasi-form" action="/admin/alokasi-pembimbing" method="POST" class="space-y-4">
+                    <div>
+                        <label for="mahasiswa-select" class="block text-sm font-medium text-gray-700">Pilih Mahasiswa (Tanpa Pembimbing)</label>
+                        <!-- PERUBAHAN: Dropdown Mahasiswa dibuat dinamis -->
+                        <select id="mahasiswa-select" name="mahasiswaId" required class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Pilih Mahasiswa...</option>
+                            <% if (mahasiswaTanpaDosen && mahasiswaTanpaDosen.length > 0) { %>
+                                <% mahasiswaTanpaDosen.forEach(mhs => { %>
+                                    <option value="<%= mhs.id %>"><%= mhs.nama %> (<%= mhs.nim %>)</option>
+                                <% }) %>
+                            <% } else { %>
+                                <option disabled>Semua mahasiswa sudah memiliki pembimbing.</option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dosen-select" class="block text-sm font-medium text-gray-700">Pilih Dosen Pembimbing</label>
+                        <!-- PERUBAHAN: Dropdown Dosen dibuat dinamis -->
+                        <select id="dosen-select" name="dosenId" required class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Pilih Dosen...</option>
+                             <% if (semuaDosen && semuaDosen.length > 0) { %>
+                                <% semuaDosen.forEach(dosen => { %>
+                                    <option value="<%= dosen.id %>"><%= dosen.nama %></option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                    <!-- Modal Footer -->
+                    <div class="pt-4 flex justify-end gap-3">
+                        <button type="button" id="cancel-alokasi-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 font-semibold">Batal</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold">Simpan Alokasi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.271.0/dist/umd/lucide.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+
+        // Accordion Logic
+        document.querySelectorAll('button[data-target]').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetPanel = document.getElementById(button.dataset.target);
+                const icon = button.querySelector('[data-lucide="chevron-down"]');
+                targetPanel?.classList.toggle('hidden');
+                icon?.classList.toggle('rotate-180');
+            });
+        });
+
+        // Fungsi Pencarian Utama
+        function handleSearch() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        const dosenCards = document.querySelectorAll('[data-dosen-card]');
+
+        dosenCards.forEach(card => {
+        const dosenName = card.querySelector('[data-dosen-name]').textContent.toLowerCase();
+        const nidn = card.querySelector('[data-dosen-nidn]').textContent.toLowerCase();
+        const mahasiswaList = card.querySelectorAll('[data-mahasiswa-name]');
+        
+        let hasMatch = 
+            dosenName.includes(searchTerm) || 
+            nidn.includes(searchTerm);
+
+        // Cek juga nama mahasiswa bimbingan
+        mahasiswaList.forEach(mhs => {
+            if (mhs.textContent.toLowerCase().includes(searchTerm)) {
+                hasMatch = true;
+            }
+        });
+
+        // Toggle tampilan berdasarkan hasil pencarian
+        card.style.display = hasMatch ? 'block' : 'none';
+    });
+}
+
+// Event Listeners
+document.getElementById('search-btn').addEventListener('click', handleSearch);
+
+// Pencarian saat menekan Enter
+document.getElementById('search-input').addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') handleSearch();
+});
+
+        
+        // Sidebar Logic
+        // ... (skrip sidebar tetap sama) ...
+      });
+    </script>
+</body>
+</html>

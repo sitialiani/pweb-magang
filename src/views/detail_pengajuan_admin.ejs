@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Pengajuan Magang - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-[#7c9dab] text-white flex flex-col p-4 fixed h-full shadow-lg">
+            <!-- Profile Photo & Info Admin -->
+            <div class="text-center py-4 border-b border-white/20">
+                <img src="https://placehold.co/100x100/E7EEF0/5c7a89?text=Admin" alt="Foto Profil Admin" class="rounded-lg w-24 h-24 mx-auto mb-3 border-4 border-white/30">
+                <h3 class="font-bold text-lg">Admin Sistem</h3>
+                <p class="text-sm">Administrator</p>
+            </div>
+
+            <!-- Navigation Links Admin -->
+            <nav class="mt-6 flex-grow overflow-y-auto pr-2">
+                <ul class="space-y-1 pb-4">
+                  <li>
+                    <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-sidebar-hover">
+                      <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                    </a>
+                  </li>
+            
+                  <li>
+                     <button class="w-full flex justify-between items-center px-4 py-3 hover:bg-sidebar-hover rounded-md" data-menu="proses-magang">
+                          <span class="flex items-center gap-3"><i data-lucide="case-sensitive"></i> Proses Magang</span>
+                          <i data-lucide="chevron-down" class="w-5 h-5 rotate-180"></i>
+                        </button>
+                    <div id="proses-magang" class="pl-8 pt-1 space-y-1">
+                          <a href="/admin/pengajuan-magang" class="block px-4 py-2.5 rounded-md hover:bg-sidebar-active text-sm font-bold">Pengajuan Magang</a>
+                          <a href="/admin/progress-magang" class="block px-4 py-2.5 rounded-md hover:bg-sidebar-hover text-sm">Progress Magang</a>
+                          <a href="/admin/dosen-pembimbing" class="block px-4 py-2.5 rounded-md hover:bg-sidebar-hover text-sm">Dosen Pembimbing</a>
+                        </div>
+                  </li>
+            
+                </ul>
+              </nav>
+
+            <!-- Logout -->
+            <div class="mt-auto pt-4 border-t border-white/20">
+                <a href="/logout" class="flex items-center gap-3 w-fit mx-auto px-6 py-2.5 rounded-md bg-red-600/80 hover:bg-red-700/80 transition-colors duration-200">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-72 p-8 w-full bg-gray-100">
+            <!-- Header -->
+            <div class="flex items-center gap-4 mb-6">
+                <a href="/admin/pengajuan-magang" class="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 font-semibold transition-colors shadow-sm">
+                    <i data-lucide="arrow-left" class="w-5 h-5 text-gray-700"></i>
+                    Kembali ke Daftar Pengajuan
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Detail Pengajuan Magang</h1>
+                    <p class="text-gray-600">ID Pengajuan: #<%= detail.id %></p>
+                </div>
+            </div>
+
+            <!-- Status Badge -->
+            <div class="mb-6">
+                <span class="inline-flex px-4 py-2 text-sm font-semibold rounded-full
+                    <%= detail.status === 'diterima' ? 'bg-green-100 text-green-800 border border-green-300' : 
+                        detail.status === 'ditolak' ? 'bg-red-100 text-red-800 border border-red-300' : 
+                        'bg-yellow-100 text-yellow-800 border border-yellow-300' %>">
+                    <i data-lucide="<%= detail.status === 'diterima' ? 'check-circle' : detail.status === 'ditolak' ? 'x-circle' : 'clock' %>" class="w-4 h-4 mr-2"></i>
+                    Status: <%= detail.status === 'diterima' ? 'DITERIMA' : 
+                        detail.status === 'ditolak' ? 'DITOLAK' : 'MENUNGGU VERIFIKASI' %>
+                </span>
+            </div>
+
+            <!-- Flash Messages -->
+            <% if (typeof messages !== 'undefined' && messages.success) { %>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                    <%= messages.success %>
+                </div>
+            <% } %>
+            <% if (typeof messages !== 'undefined' && messages.error) { %>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                    <%= messages.error %>
+                </div>
+            <% } %>
+
+            <!-- Data Mahasiswa Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                    Data Mahasiswa
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Nama Lengkap:</span>
+                            <span class="text-gray-900"><%= detail.nama %></span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">NIM:</span>
+                            <span class="text-gray-900 font-mono"><%= detail.nim %></span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Email:</span>
+                            <span class="text-gray-900"><%= detail.email %></span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Dosen Pembimbing:</span>
+                            <span class="text-gray-900"><%= detail.dosen_pembimbing %></span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Tanggal Pengajuan:</span>
+                            <span class="text-gray-900"><%= detail.tanggal_pengajuan %></span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="font-semibold text-gray-700">Status Pengajuan:</span>
+                            <span class="<%= detail.status === 'diterima' ? 'text-green-600' : detail.status === 'ditolak' ? 'text-red-600' : 'text-yellow-600' %> font-semibold">
+                                <%= detail.status === 'diterima' ? 'DITERIMA' : detail.status === 'ditolak' ? 'DITOLAK' : 'MENUNGGU VERIFIKASI' %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Perusahaan Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                    <i data-lucide="building" class="w-5 h-5"></i>
+                    Data Perusahaan Tujuan
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Nama Perusahaan:</span>
+                            <span class="text-gray-900"><%= detail.perusahaan %></span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Alamat:</span>
+                            <span class="text-gray-900"><%= detail.alamat_perusahaan %></span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Email:</span>
+                            <span class="text-gray-900"><%= detail.email_perusahaan %></span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="font-semibold text-gray-700">Telepon:</span>
+                            <span class="text-gray-900"><%= detail.telepon_perusahaan %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Magang Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i>
+                    Data Magang
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Posisi/Jabatan:</span>
+                            <span class="text-gray-900"><%= detail.posisi %></span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Lokasi Magang:</span>
+                            <span class="text-gray-900"><%= detail.lokasi %></span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="font-semibold text-gray-700">Durasi Magang:</span>
+                            <span class="text-gray-900"><%= detail.durasi %> bulan</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="font-semibold text-gray-700">Deskripsi Pekerjaan:</span>
+                            <span class="text-gray-900"><%= detail.deskripsi %></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dokumen Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                    Dokumen yang Diajukan
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <!-- CV -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-gray-700">CV/Resume</span>
+                                <% if (detail.cv) { %>
+                                    <span class="text-green-600 text-sm font-medium">✓ Tersedia</span>
+                                <% } else { %>
+                                    <span class="text-red-600 text-sm font-medium">✗ Tidak ada</span>
+                                <% } %>
+                            </div>
+                            <% if (detail.cv) { %>
+                                <a href="/pengajuan/<%= detail.cv %>" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-2 rounded-md">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Lihat Dokumen
+                                </a>
+                            <% } else { %>
+                                <span class="text-gray-500 text-sm">Dokumen tidak diunggah</span>
+                            <% } %>
+                        </div>
+
+                        <!-- Transkrip -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-gray-700">Transkrip Nilai</span>
+                                <% if (detail.transkrip) { %>
+                                    <span class="text-green-600 text-sm font-medium">✓ Tersedia</span>
+                                <% } else { %>
+                                    <span class="text-red-600 text-sm font-medium">✗ Tidak ada</span>
+                                <% } %>
+                            </div>
+                            <% if (detail.transkrip) { %>
+                                <a href="/pengajuan/<%= detail.transkrip %>" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-2 rounded-md">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Lihat Dokumen
+                                </a>
+                            <% } else { %>
+                                <span class="text-gray-500 text-sm">Dokumen tidak diunggah</span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- KRS -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-gray-700">KRS</span>
+                                <% if (detail.krs) { %>
+                                    <span class="text-green-600 text-sm font-medium">✓ Tersedia</span>
+                                <% } else { %>
+                                    <span class="text-red-600 text-sm font-medium">✗ Tidak ada</span>
+                                <% } %>
+                            </div>
+                            <% if (detail.krs) { %>
+                                <a href="/pengajuan/<%= detail.krs %>" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-2 rounded-md">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Lihat Dokumen
+                                </a>
+                            <% } else { %>
+                                <span class="text-gray-500 text-sm">Dokumen tidak diunggah</span>
+                            <% } %>
+                        </div>
+
+                        <!-- Dokumen Pendukung -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-gray-700">Dokumen Pendukung</span>
+                                <% if (detail.dokumen_pendukung) { %>
+                                    <span class="text-green-600 text-sm font-medium">✓ Tersedia</span>
+                                <% } else { %>
+                                    <span class="text-red-600 text-sm font-medium">✗ Tidak ada</span>
+                                <% } %>
+                            </div>
+                            <% if (detail.dokumen_pendukung) { %>
+                                <a href="/pengajuan/<%= detail.dokumen_pendukung %>" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-2 rounded-md">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Lihat Dokumen
+                                </a>
+                            <% } else { %>
+                                <span class="text-gray-500 text-sm">Dokumen tidak diunggah</span>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Catatan Verifikasi -->
+            <% if (detail.keterangan && detail.keterangan !== 'Tidak ada catatan') { %>
+                <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                        <i data-lucide="message-square" class="w-5 h-5"></i>
+                        Catatan Verifikasi
+                    </h2>
+                    <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <p class="text-gray-800 italic">"<%= detail.keterangan %>"</p>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Verifikasi Actions -->
+            <% if (detail.status === 'diajukan') { %>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i>
+                        Verifikasi Pengajuan
+                    </h2>
+                    <form action="/admin/pengajuan/verifikasi/<%= detail.id %>" method="POST" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Status Verifikasi *</label>
+                                <select name="status" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                                    <option value="">Pilih status verifikasi</option>
+                                    <option value="diterima" class="text-green-700">✓ Diterima</option>
+                                    <option value="ditolak" class="text-red-700">✗ Ditolak</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Verifikasi</label>
+                                <input type="date" value="<%= new Date().toISOString().split('T')[0] %>" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" readonly>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Catatan Verifikasi (Opsional)</label>
+                            <textarea name="catatan" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Masukkan catatan atau alasan verifikasi..."></textarea>
+                            <p class="text-sm text-gray-500 mt-1">Catatan ini akan ditampilkan kepada mahasiswa</p>
+                        </div>
+                        <div class="flex gap-4 pt-4 border-t border-gray-200">
+                            <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold flex items-center gap-2">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                                Proses Verifikasi
+                            </button>
+                            <a href="/admin/pengajuan-magang" class="px-8 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-semibold flex items-center gap-2">
+                                <i data-lucide="x" class="w-5 h-5"></i>
+                                Batal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            <% } else { %>
+                <!-- Status Sudah Diverifikasi -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                        <i data-lucide="info" class="w-5 h-5"></i>
+                        Status Verifikasi
+                    </h2>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-700">
+                            Pengajuan ini sudah diverifikasi dengan status 
+                            <span class="font-semibold <%= detail.status === 'diterima' ? 'text-green-600' : 'text-red-600' %>">
+                                <%= detail.status === 'diterima' ? 'DITERIMA' : 'DITOLAK' %>
+                            </span>
+                        </p>
+                        <% if (detail.keterangan && detail.keterangan !== 'Tidak ada catatan') { %>
+                            <p class="text-gray-600 mt-2 italic">"<%= detail.keterangan %>"</p>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Auto-resize textarea
+        const textarea = document.querySelector('textarea[name="catatan"]');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        }
+
+        // Form validation
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const status = document.querySelector('select[name="status"]').value;
+                if (!status) {
+                    e.preventDefault();
+                    alert('Silakan pilih status verifikasi terlebih dahulu.');
+                    return false;
+                }
+            });
+        }
+    </script>
+</body>
+</html> 
