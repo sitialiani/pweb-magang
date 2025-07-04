@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Backup - Portal Admin</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-content-bg">
+    <div class="flex min-h-screen">
+        <!-- =============== Sidebar Admin =============== -->
+        <aside class="w-72 bg-sidebar-bg text-white flex flex-col p-4 fixed h-full shadow-lg">
+            <!-- Profile Info Admin -->
+            <div class="text-center py-4 border-b border-white/20">
+                <img src="https://placehold.co/100x100/E7EEF0/5c7a89?text=Admin" alt="Foto Profil Admin" class="rounded-lg w-24 h-24 mx-auto mb-3 border-4 border-white/30">
+                <h3 class="font-bold text-lg">Admin Jurusan</h3>
+                <p class="text-sm">Sistem Informasi</p>
+            </div>
+
+            <!-- Navigation Links Admin -->
+            <nav class="mt-6 flex-grow overflow-y-auto pr-2">
+                <ul class="space-y-1 pb-4">
+                    <li><a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-sidebar-hover transition-colors duration-200"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a></li>
+                    
+                    <!-- Menu Pengaturan Sistem (Aktif & Terbuka) -->
+                    <li>
+                        <button class="w-full flex justify-between items-center px-4 py-3 bg-sidebar-active rounded-md" data-menu="pengaturan">
+                            <span class="flex items-center gap-3"><i data-lucide="settings" class="w-5 h-5"></i> Pengaturan Sistem</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 transition-transform duration-300 rotate-180"></i>
+                        </button>
+                        <div id="pengaturan" class="pl-8 pt-1 space-y-1">
+                            <a href="/admin/konfigurasi-notifikasi" class="block px-4 py-2.5 rounded-md hover:bg-sidebar-hover text-sm">Konfigurasi Notifikasi</a>
+                            <a href="/admin/manajemen-backup" class="block px-4 py-2.5 rounded-md bg-sidebar-hover text-sm font-bold">Manajemen Backup</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="mt-auto pt-4 border-t border-white/20">
+                <a href="/logout" class="flex items-center gap-3 w-fit mx-auto px-6 py-2.5 rounded-md bg-red-600/80 hover:bg-red-700/80 transition-colors duration-200">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- =============== Main Content =============== -->
+        <main class="ml-72 flex-1 p-8 overflow-y-auto">
+            <header class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Manajemen Backup Data</h1>
+                    <p class="text-gray-600">Buat, unduh, dan kelola file backup database sistem.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="font-semibold text-gray-800">Admin Jurusan</p>
+                        <p class="text-sm text-gray-500">Online</p>
+                    </div>
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow">
+                        <i data-lucide="shield-check" class="text-gray-600"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Kolom Kiri: Riwayat Backup -->
+                    <div class="lg:col-span-2 space-y-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold text-gray-800 mb-4">Riwayat Backup</h2>
+                            <% if (backups.length > 0) { %>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead class="text-xs text-gray-500 bg-gray-50">
+                                        <tr>
+                                            <th class="py-2 px-3 text-left">File Backup</th>
+                                            <th class="py-2 px-3 text-left">Tanggal</th>
+                                            <th class="py-2 px-3 text-left">Ukuran</th>
+                                            <th class="py-2 px-3 text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% backups.forEach(backup => { %>
+                                        <tr class="border-b">
+                                            <td class="py-3 px-3 font-mono text-xs"><%= backup.fileName %><br><span class="text-gray-500"><%= backup.description || 'Tanpa deskripsi' %></span></td>
+                                            <td class="py-3 px-3"><%= new Date(backup.createdAt).toLocaleString('id-ID') %></td>
+                                            <td class="py-3 px-3 font-semibold"><%= backup.fileSize %></td>
+                                            <td class="py-3 px-3 text-center">
+                                                <div class="flex justify-center items-center gap-2">
+                                                    <a href="/admin/manajemen-backup/<%= backup.id %>/download" class="flex items-center gap-1 text-blue-600 hover:underline" title="Unduh">
+                                                        <i data-lucide="download" class="w-4 h-4"></i> Unduh
+                                                    </a>
+                                                    <form action="/admin/manajemen-backup/<%= backup.id %>/delete" method="POST" onsubmit="return confirm('Anda yakin ingin menghapus file backup ini secara permanen?');">
+                                                        <button type="submit" class="flex items-center gap-1 text-red-600 hover:underline" title="Hapus">
+                                                            <i data-lucide="trash-2" class="w-4 h-4"></i> Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <% } else { %>
+                                <div class="text-center py-10">
+                                    <i data-lucide="database-zap" class="w-16 h-16 mx-auto text-gray-300"></i>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada backup</h3>
+                                    <p class="mt-1 text-sm text-gray-500">Mulai buat backup pertama Anda.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <!-- Kolom Kanan: Aksi Manual -->
+                    <div class="lg:col-span-1 space-y-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h2 class="text-xl font-bold text-gray-800 mb-2">Backup Manual</h2>
+                            <p class="text-sm text-gray-600 mb-4">Buat cadangan data sistem saat ini juga. Proses ini mungkin memakan waktu beberapa saat.</p>
+                            <form action="/admin/manajemen-backup/create" method="POST">
+                                <div class="mb-4">
+                                    <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi (Opsional)</label>
+                                    <input type="text" name="description" id="description" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Contoh: Sebelum update data mahasiswa">
+                                </div>
+                                <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-semibold transition-colors shadow-sm">
+                                    <i data-lucide="download-cloud" class="w-5 h-5"></i>
+                                    Lakukan Backup Sekarang
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.271.0/dist/umd/lucide.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Render Ikon
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+        }
+
+        // --- Sidebar Logic ---
+        document.querySelectorAll('button[data-menu]').forEach(button => {
+            button.addEventListener('click', () => {
+                const menuId = button.dataset.menu;
+                const submenu = document.getElementById(menuId);
+                const icon = button.querySelector('[data-lucide="chevron-down"]');
+                submenu.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+      });
+    </script>
+</body>
+</html>

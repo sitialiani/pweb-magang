@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#e6eef1] font-sans text-gray-800">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-10 rounded-2xl shadow-lg w-full max-w-md">
+      <h1 class="text-3xl font-bold text-center mb-6 text-[#333]">Daftar Akun</h1>
+      <% if (error) { %>
+        <p class="text-red-600 text-center mb-4"><%= error %></p>
+      <% } %>
+      <form action="/register" method="POST" class="space-y-5">
+        <div>
+          <label for="username" class="block font-semibold mb-1">Username</label>
+          <input 
+            type="text" 
+            name="username" 
+            id="username" 
+            required 
+            class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <label for="email" class="block font-semibold mb-1">Email</label>
+          <input 
+            type="email" 
+            name="email" 
+            id="email" 
+            required 
+            class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <label for="password" class="block font-semibold mb-1">Password</label>
+          <input 
+            type="password" 
+            name="password" 
+            id="password" 
+            required 
+            class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <label for="confirm_password" class="block font-semibold mb-1">Konfirmasi Password</label>
+          <input 
+            type="password" 
+            name="confirm_password" 
+            id="confirm_password" 
+            required 
+            class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+        <div>
+          <label for="role" class="block font-semibold mb-1">Pilih Role</label>
+          <select name="role" id="role" required class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            <option value="">-- Pilih Role --</option>
+            <option value="mahasiswa">Mahasiswa</option>
+            <option value="dosen">Dosen</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <!-- Field Mahasiswa -->
+        <div id="mahasiswa-fields" class="hidden">
+          <div>
+            <label for="mhs_nama" class="block font-semibold mb-1">Nama Lengkap</label>
+            <input type="text" name="mhs_nama" id="mhs_nama" class="w-full border border-gray-300 rounded px-4 py-2" />
+          </div>
+          <div>
+            <label for="nim" class="block font-semibold mb-1">NIM</label>
+            <input type="text" name="nim" id="nim" class="w-full border border-gray-300 rounded px-4 py-2" />
+          </div>
+          <div>
+            <label for="jurusan" class="block font-semibold mb-1">Jurusan</label>
+            <input type="text" name="jurusan" id="jurusan" class="w-full border border-gray-300 rounded px-4 py-2" />
+          </div>
+          <div>
+            <label for="angkatan" class="block font-semibold mb-1">Angkatan</label>
+            <input type="number" name="angkatan" id="angkatan" class="w-full border border-gray-300 rounded px-4 py-2" />
+          </div>
+          <div>
+            <label for="no_hp" class="block font-semibold mb-1">No HP</label>
+            <input type="text" name="no_hp" id="no_hp" class="w-full border border-gray-300 rounded px-4 py-2" />
+          </div>
+        </div>
+        <!-- Field Dosen -->
+        <div id="dosen-fields" class="hidden">
+          <div>
+            <label for="dsn_nama" class="block font-semibold mb-1">Nama Lengkap</label>
+            <input type="text" name="dsn_nama" id="dsn_nama" class="w-full border border-gray-300 rounded px-4 py-2" />
+          </div>
+          <div>
+            <label for="nidn" class="block font-semibold mb-1">NIDN</label>
+            <input type="text" name="nidn" id="nidn" class="w-full border border-gray-300 rounded px-4 py-2" />
+          </div>
+          <div>
+            <label for="telepon" class="block font-semibold mb-1">Telepon</label>
+            <input type="text" name="telepon" id="telepon" class="w-full border border-gray-300 rounded px-4 py-2" />
+          </div>
+        </div>
+        <div class="text-center">
+          <button 
+            type="submit" 
+            class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-200 font-semibold"
+          >
+            Daftar
+          </button>
+        </div>
+      </form>
+      <div class="text-center mt-4">
+        <a href="/login" class="text-blue-500 hover:underline">Sudah punya akun? Login</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    const roleSelect = document.getElementById('role');
+    const mhsFields = document.getElementById('mahasiswa-fields');
+    const dsnFields = document.getElementById('dosen-fields');
+    roleSelect.addEventListener('change', function() {
+      if (this.value === 'mahasiswa') {
+        mhsFields.classList.remove('hidden');
+        dsnFields.classList.add('hidden');
+        // Set required
+        document.getElementById('mhs_nama').required = true;
+        document.getElementById('nim').required = true;
+        document.getElementById('jurusan').required = true;
+        document.getElementById('angkatan').required = true;
+        document.getElementById('no_hp').required = true;
+        // Dosen fields not required
+        document.getElementById('dsn_nama').required = false;
+        document.getElementById('nidn').required = false;
+        document.getElementById('telepon').required = false;
+      } else if (this.value === 'dosen') {
+        mhsFields.classList.add('hidden');
+        dsnFields.classList.remove('hidden');
+        // Set required
+        document.getElementById('dsn_nama').required = true;
+        document.getElementById('nidn').required = true;
+        document.getElementById('telepon').required = true;
+        // Mahasiswa fields not required
+        document.getElementById('mhs_nama').required = false;
+        document.getElementById('nim').required = false;
+        document.getElementById('jurusan').required = false;
+        document.getElementById('angkatan').required = false;
+        document.getElementById('no_hp').required = false;
+      } else {
+        mhsFields.classList.add('hidden');
+        dsnFields.classList.add('hidden');
+        // Semua field tambahan tidak required
+        document.getElementById('mhs_nama').required = false;
+        document.getElementById('nim').required = false;
+        document.getElementById('jurusan').required = false;
+        document.getElementById('angkatan').required = false;
+        document.getElementById('no_hp').required = false;
+        document.getElementById('dsn_nama').required = false;
+        document.getElementById('nidn').required = false;
+        document.getElementById('telepon').required = false;
+      }
+    });
+  </script>
+</body>
+</html> 

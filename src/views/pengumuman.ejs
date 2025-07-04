@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengumuman - Portal Mahasiswa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-content-bg">
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#8EAAB8] text-white flex flex-col p-4 fixed h-full shadow-lg">
+      <!-- Profile section -->
+      <div class="text-center py-4 border-b border-white/20">
+        <img src="https://placehold.co/100x100/E7EEF0/5c7a89?text=Foto" alt="Foto Profil" 
+             class="rounded-lg w-24 h-24 mx-auto mb-3 border-4 border-white/30">
+        <h3 class="font-bold text-lg">Siti Aliani</h3>
+        <p class="text-sm">2311522006</p>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="mt-6 flex-grow">
+        <ul class="space-y-2">
+           <li><a href="Dashboard" class="flex items-center gap-3 px-4 py-2.5 rounded-md hover:bg-sidebar-hover transition-colors duration-200">Dashboard</a></li>
+                    <li><a href="Daftar Lowongan" class="flex items-center gap-3 px-4 py-2.5 rounded-md hover:bg-sidebar-hover transition-colors duration-200">Daftar Lowongan</a></li>
+                    <li><a href="Formulir Pengajuan" class="flex items-center gap-3 px-4 py-2.5 rounded-md hover:bg-sidebar-hover transition-colors duration-200">Formulir Pengajuan</a></li>
+                    <li><a href="Status & Verifikasi" class="flex items-center gap-3 px-4 py-2.5 rounded-md hover:bg-sidebar-hover transition-colors duration-200">Status & Verifikasi</a></li>
+                    <li><a href="Logbook" class="flex items-center gap-3 px-4 py-2.5 rounded-md hover:bg-sidebar-hover transition-colors duration-200">Logbook</a></li>
+                    <li><a href="/mahasiswa/laporan-akhir" class="flex items-center gap-3 px-4 py-2.5 rounded-md hover:bg-sidebar-hover transition-colors duration-200">Laporan Akhir</a></li>
+                    <li><a href="Penilaian" class="flex items-center gap-3 px-4 py-2.5 rounded-md hover:bg-sidebar-hover transition-colors duration-200">Penilaian</a></li>
+                    <li><a href="Pengumuman" class="flex items-center gap-3 px-4 py-2.5 rounded-md bg-sidebar-active font-semibold shadow-inner transition-colors duration-200">Pengumuman</a></li>
+        </ul>
+      </nav>
+
+      <!-- Logout -->
+      <div class="mt-auto">
+        <a href="Logout" class="flex items-center gap-3 w-fit mx-auto px-6 py-2.5 rounded-md bg-red-600/80 hover:bg-red-700/80 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 flex-1 p-8 min-h-screen">
+      <!-- Header -->
+      <header class="flex justify-end items-center mb-8">
+        <div class="flex items-center gap-4">
+          <div class="text-right">
+            <p class="font-semibold text-gray-800">Siti Aliani</p>
+            <p class="text-sm text-gray-500">Mahasiswa Aktif</p>
+          </div>
+          <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- Pengumuman Content -->
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6 text-[#5C7988]">PENGUMUMAN!</h1>
+        
+        <!-- Daftar Pengumuman -->
+        <div class="space-y-4">
+          <% if (pengumuman && pengumuman.length > 0) { %>
+            <% pengumuman.forEach(peng => { %>
+              <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer" onclick="showDetail(<%= peng.id %>)">
+                <div class="flex justify-between items-start">
+                  <div class="flex-1">
+                    <h3 class="text-lg font-semibold text-[#5C7988] mb-2"><%= peng.judul %></h3>
+                    <div class="flex items-center text-sm text-gray-500 mb-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span><%= peng.tanggal %></span>
+                      <span class="mx-2">•</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span><%= peng.waktu %> WIB</span>
+                    </div>
+                    <p class="text-gray-700 line-clamp-2"><%= peng.isi.substring(0, 150) %><%= peng.isi.length > 150 ? '...' : '' %></p>
+                    <div class="flex items-center mt-3">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <%= peng.kategori %>
+                      </span>
+                      <span class="ml-2 text-xs text-gray-500">oleh <%= peng.admin %></span>
+                      <% if (peng.lampiran) { %>
+                        <span class="ml-2 inline-flex items-center text-xs text-green-600">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                          </svg>
+                          <%= peng.lampiran.split('/').pop() %>
+                        </span>
+                      <% } %>
+                    </div>
+                  </div>
+                  <div class="ml-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="bg-white rounded-lg shadow-md p-8 text-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">Belum Ada Pengumuman</h3>
+              <p class="text-gray-500">Saat ini belum ada pengumuman yang tersedia.</p>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Detail Pengumuman -->
+  <div id="detail-modal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center p-4 z-50 hidden modal">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-start mb-4">
+          <h3 id="modal-title" class="text-xl font-bold text-[#5C7988]">Judul Pengumuman</h3>
+          <button onclick="hideModal()" class="text-gray-500 hover:text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div class="flex items-center text-sm text-gray-500 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span id="modal-date">22 Juni 2025</span>
+          <span class="mx-2">•</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span id="modal-time">10:00 WIB</span>
+        </div>
+        
+        <div id="modal-content" class="prose prose-sm max-w-none text-gray-700 mb-6">
+          <!-- Konten pengumuman akan diisi oleh JavaScript -->
+        </div>
+        
+        <div class="border-t pt-4">
+          <h4 class="font-semibold text-[#5C7988] mb-2">Lampiran:</h4>
+          <div id="attachment-container" class="flex items-center text-sm text-[#5C7988] hover:text-[#7A99A7]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+            <a href="Unduh Dokumen" id="modal-attachment" class="underline" download>Unduh Dokumen</a>
+          </div>
+          <div id="no-attachment" class="text-sm text-gray-500" style="display: none;">
+            Tidak ada lampiran
+          </div>
+        </div>
+        
+        <div class="flex justify-end mt-6">
+          <button onclick="hideModal()" class="bg-[#5C7988] hover:bg-[#4a6270] text-white px-6 py-2 rounded-lg transition">
+            Tutup
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fungsi untuk menampilkan detail pengumuman
+    async function showDetail(id) {
+      try {
+        const response = await fetch(`/mahasiswa/pengumuman/${id}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          const pengumuman = result.data;
+          
+          // Update modal content
+          document.getElementById('modal-title').textContent = pengumuman.judul;
+          document.getElementById('modal-date').textContent = pengumuman.tanggal;
+          document.getElementById('modal-time').textContent = pengumuman.waktu + ' WIB';
+          document.getElementById('modal-content').innerHTML = pengumuman.isi;
+          
+          // Handle lampiran
+          const attachmentLink = document.getElementById('modal-attachment');
+          const attachmentContainer = document.getElementById('attachment-container');
+          const noAttachment = document.getElementById('no-attachment');
+          
+          if (pengumuman.lampiran) {
+            attachmentLink.href = pengumuman.lampiran;
+            const fileName = pengumuman.lampiran.split('/').pop();
+            attachmentLink.textContent = `Unduh ${fileName}`;
+            attachmentContainer.style.display = 'flex';
+            noAttachment.style.display = 'none';
+          } else {
+            attachmentContainer.style.display = 'none';
+            noAttachment.style.display = 'block';
+          }
+          
+          // Show modal
+          document.getElementById('detail-modal').classList.remove('hidden');
+          document.getElementById('detail-modal').classList.add('flex');
+        } else {
+          alert('Gagal memuat detail pengumuman: ' + result.message);
+        }
+      } catch (error) {
+        console.error('Error fetching pengumuman detail:', error);
+        alert('Terjadi kesalahan saat memuat detail pengumuman');
+      }
+    }
+
+    // Fungsi untuk menyembunyikan modal
+    function hideModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+      document.getElementById('detail-modal').classList.remove('flex');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('detail-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        hideModal();
+      }
+    });
+
+    // Highlight menu aktif
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPath = window.location.pathname;
+      const menuLinks = document.querySelectorAll('nav ul li a');
+
+      menuLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('bg-[#7A99A7]');
+          link.classList.remove('hover:bg-[#7A99A7]');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

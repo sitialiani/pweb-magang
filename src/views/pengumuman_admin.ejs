@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>pengumuman - Portal Admin</title>
+  <link href="/css/style.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.271.0/dist/umd/lucide.min.js"></script>
+</head>
+<body class="bg-content-bg">
+
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+    <aside class="w-72 bg-sidebar-bg text-white flex flex-col p-4 fixed h-full shadow-lg">
+      <div class="text-center py-4 border-b border-white/20">
+        <img src="https://placehold.co/100x100/E7EEF0/5c7a89?text=Admin" class="rounded-lg w-24 h-24 mx-auto mb-3 border-4 border-white/30" />
+        <h3 class="font-bold text-lg">Admin Jurusan</h3>
+        <p class="text-sm">Sistem Informasi</p>
+      </div>
+      <nav class="mt-6 flex-grow overflow-y-auto pr-2">
+        <ul class="space-y-1 pb-4">
+          <li><a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-sidebar-hover"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a></li>
+          <li>
+            <button class="w-full flex justify-between items-center px-4 py-3 hover:bg-sidebar-hover rounded-md" data-menu="konten">
+              <span class="flex items-center gap-3"><i data-lucide="message-square"></i> Konten & Komunikasi</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 rotate-180"></i>
+            </button>
+            <div id="konten" class="pl-8 pt-1 space-y-1">
+              <a href="/admin/pengumuman" class="block px-4 py-2.5 rounded-md bg-sidebar-active text-sm">Pengumuman</a>
+              <a href="/admin/template-dokumen" class="block px-4 py-2.5 rounded-md hover:bg-sidebar-hover text-sm">Template Dokumen</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+    <div class="mt-auto pt-4 border-t border-white/20">
+      <a href="Logout" class="flex items-center gap-3 w-fit mx-auto px-6 py-2.5 rounded-md bg-red-600/80 hover:bg-red-700/80 transition-colors duration-200">
+        <i data-lucide="log-out" class="w-5 h-5"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="ml-72 pl-10 pr-10 py-10 flex-1 min-h-screen bg-[#F8FBFC]">
+    <header class="flex justify-between items-center mb-5">
+      <h1 class="text-2xl font-bold text-[#5C7988]">Tambah Pengumuman Magang</h1>
+      <div class="flex items-center gap-4">
+        <div class="text-right">
+          <p class="font-semibold text-gray-800">Admin Jurusan</p>
+          <p class="text-sm text-gray-500">Sistem Informasi</p>
+        </div>
+        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow">
+          <i data-lucide="user" class="w-6 h-6 text-gray-600"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Formulir -->
+    <div class="bg-white rounded-xl shadow-lg p-8 w-full">
+      <form id="form-pengumuman" class="space-y-6">
+        <div>
+          <label for="judul" class="block font-medium text-[#5C7988] mb-2">Judul Pengumuman</label>
+          <input type="text" id="judul" placeholder="Masukkan judul pengumuman" class="w-full p-3 border border-[#8EAAB8] rounded-lg">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="tanggal" class="block font-medium text-[#5C7988] mb-2">Tanggal</label>
+            <input type="date" id="tanggal" class="w-full p-3 border border-[#8EAAB8] rounded-lg">
+          </div>
+          <div>
+            <label for="waktu" class="block font-medium text-[#5C7988] mb-2">Waktu</label>
+            <input type="time" id="waktu" class="w-full p-3 border border-[#8EAAB8] rounded-lg">
+          </div>
+        </div>
+        <div>
+          <label for="isi" class="block font-medium text-[#5C7988] mb-2">Isi Pengumuman</label>
+          <textarea id="isi" rows="6" class="w-full p-3 border border-[#8EAAB8] rounded-lg"></textarea>
+        </div>
+        <div>
+          <label for="lampiran" class="block font-medium text-[#5C7988] mb-2">Lampiran (Opsional)</label>
+          <div class="flex items-center">
+            <input type="file" id="lampiran" class="hidden">
+            <label for="lampiran" class="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg border border-gray-300 mr-3">Pilih File</label>
+            <span id="nama-file" class="text-sm text-gray-500">Belum ada file dipilih</span>
+          </div>
+        </div>
+        <div>
+          <label for="ditujukan_kepada" class="block font-medium text-[#5C7988] mb-2">Ditujukan Kepada</label>
+          <select id="ditujukan_kepada" class="w-full p-3 border border-[#8EAAB8] rounded-lg">
+            <option value="semua">Semua</option>
+            <option value="mahasiswa">Mahasiswa</option>
+            <option value="dosen">Dosen</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium text-[#5C7988] mb-2">Kategori</label>
+          <div class="flex flex-wrap gap-4">
+            <label class="inline-flex items-center">
+              <input type="radio" name="kategori" value="magang" checked class="text-[#8EAAB8]"> <span class="ml-2">Tempat Magang</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="radio" name="kategori" value="umum" class="text-[#8EAAB8]"> <span class="ml-2">Pengumuman Umum</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input type="radio" name="kategori" value="penting" class="text-[#8EAAB8]"> <span class="ml-2">Pengumuman Penting</span>
+            </label>
+          </div>
+        </div>
+        <div class="flex justify-end pt-4">
+          <button type="submit" class="bg-[#5C7988] hover:bg-[#4a6270] text-white px-6 py-2 rounded-lg">Simpan Pengumuman</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Daftar Pengumuman -->
+    <div id="daftar-pengumuman" class="mt-10 space-y-4"></div>
+  </main>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    lucide.createIcons();
+    document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+
+    document.getElementById('lampiran').addEventListener('change', function (e) {
+      const fileName = e.target.files[0] ? e.target.files[0].name : 'Belum ada file dipilih';
+      document.getElementById('nama-file').textContent = fileName;
+    });
+
+    const daftarPengumuman = document.getElementById('daftar-pengumuman');
+    let editIndex = null;
+
+    // Load pengumuman dari database
+    async function loadPengumuman() {
+      try {
+        const response = await fetch('/admin/pengumuman/api/all');
+        const result = await response.json();
+        
+        if (result.success) {
+          renderDaftar(result.data);
+        } else {
+          console.error('Gagal memuat pengumuman:', result.message);
+        }
+      } catch (error) {
+        console.error('Error loading pengumuman:', error);
+      }
+    }
+
+    function renderDaftar(dataPengumuman) {
+      if (dataPengumuman && dataPengumuman.length > 0) {
+        const list = dataPengumuman.map((item, index) => {
+          const tanggal = new Date(item.tanggal).toLocaleDateString('id-ID');
+          const waktu = new Date(item.tanggal).toLocaleTimeString('id-ID', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          });
+          
+          const lampiranHtml = item.lampiran ? 
+            `<div class="mt-2">
+              <span class="text-xs text-green-600 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Lampiran</span>
+              </span>
+            </div>` : '';
+          
+          return `
+            <div class="bg-white rounded-lg shadow p-4 border border-gray-200">
+              <div class="flex justify-between items-start mb-2">
+                <div class="flex-1">
+                  <h3 class="font-semibold text-lg text-[#5C7988]">${item.judul}</h3>
+                  <p class="text-sm text-gray-500">${tanggal} ${waktu}</p>
+                  <p class="text-sm mt-1">${item.isi.substring(0, 100)}${item.isi.length > 100 ? '...' : ''}</p>
+                  <p class="text-xs text-gray-500 mt-1 italic">Target: ${item.ditujukan_kepada}</p>
+                  ${lampiranHtml}
+                </div>
+                <div class="flex gap-2">
+                  <button onclick="editPengumuman(${item.id})" class="text-blue-600 hover:underline text-sm">Edit</button>
+                  <button onclick="hapusPengumuman(${item.id})" class="text-red-600 hover:underline text-sm">Hapus</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+        daftarPengumuman.innerHTML = `<h2 class="text-xl font-bold text-[#5C7988] mb-4">Daftar Pengumuman</h2>${list}`;
+      } else {
+        daftarPengumuman.innerHTML = `<h2 class="text-xl font-bold text-[#5C7988] mb-4">Daftar Pengumuman</h2><p class="text-sm text-gray-500">Belum ada pengumuman.</p>`;
+      }
+    }
+
+    window.editPengumuman = async function(id) {
+      try {
+        const response = await fetch(`/admin/pengumuman/api/all`);
+        const result = await response.json();
+        
+        if (result.success) {
+          const pengumuman = result.data.find(p => p.id === id);
+          if (pengumuman) {
+            document.getElementById('judul').value = pengumuman.judul;
+            document.getElementById('tanggal').value = new Date(pengumuman.tanggal).toISOString().split('T')[0];
+            document.getElementById('waktu').value = new Date(pengumuman.tanggal).toTimeString().slice(0, 5);
+            document.getElementById('isi').value = pengumuman.isi;
+            document.getElementById('ditujukan_kepada').value = pengumuman.ditujukan_kepada;
+            
+            // Tampilkan lampiran yang sudah ada
+            if (pengumuman.lampiran) {
+              const fileName = pengumuman.lampiran.split('/').pop();
+              document.getElementById('nama-file').textContent = `File saat ini: ${fileName}`;
+            } else {
+              document.getElementById('nama-file').textContent = 'Belum ada file dipilih';
+            }
+            
+            editIndex = id;
+          }
+        }
+      } catch (error) {
+        console.error('Error editing pengumuman:', error);
+      }
+    };
+
+    window.hapusPengumuman = async function(id) {
+      if (confirm('Yakin ingin menghapus pengumuman ini?')) {
+        try {
+          const response = await fetch(`/admin/pengumuman/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            alert('Pengumuman berhasil dihapus!');
+            loadPengumuman();
+          } else {
+            alert('Gagal menghapus pengumuman: ' + result.message);
+          }
+        } catch (error) {
+          console.error('Error deleting pengumuman:', error);
+          alert('Terjadi kesalahan saat menghapus pengumuman');
+        }
+      }
+    };
+
+    document.getElementById('form-pengumuman').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      
+      const formData = new FormData();
+      formData.append('judul', document.getElementById('judul').value);
+      formData.append('tanggal', document.getElementById('tanggal').value);
+      formData.append('waktu', document.getElementById('waktu').value);
+      formData.append('isi', document.getElementById('isi').value);
+      formData.append('ditujukan_kepada', document.getElementById('ditujukan_kepada').value);
+      formData.append('kategori', document.querySelector('input[name="kategori"]:checked').value);
+      
+      // Tambahkan file lampiran jika ada
+      const fileInput = document.getElementById('lampiran');
+      if (fileInput.files[0]) {
+        formData.append('lampiran', fileInput.files[0]);
+      }
+      
+      if (editIndex) {
+        formData.append('id', editIndex);
+      }
+
+      try {
+        const url = editIndex ? `/admin/pengumuman/update` : `/admin/pengumuman/save`;
+        const method = editIndex ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+          method: method,
+          body: formData // Gunakan FormData untuk upload file
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+          alert(editIndex ? 'Pengumuman berhasil diupdate!' : 'Pengumuman berhasil disimpan!');
+          this.reset();
+          document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+          document.getElementById('nama-file').textContent = 'Belum ada file dipilih';
+          editIndex = null;
+          loadPengumuman();
+        } else {
+          alert('Gagal menyimpan pengumuman: ' + result.message);
+        }
+      } catch (error) {
+        console.error('Error saving pengumuman:', error);
+        alert('Terjadi kesalahan saat menyimpan pengumuman');
+      }
+    });
+
+    // Load pengumuman saat halaman dimuat
+    loadPengumuman();
+  });
+
+  
+
+    // Logika Dropdown Sidebar
+        const menuButtons = document.querySelectorAll('button[data-menu]');
+        menuButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const menuId = button.dataset.menu;
+                const submenu = document.getElementById(menuId);
+                const icon = button.querySelector('[data-lucide="chevron-down"]');
+                
+                if (submenu) {
+                    const isOpening = submenu.classList.contains('hidden');
+                     document.querySelectorAll('[id^="proses-magang"], [id^="kemitraan"], [id^="konten"], [id^="pengaturan"]').forEach(otherSubmenu => {
+                         if (otherSubmenu.id !== menuId) {
+                            otherSubmenu.classList.add('hidden');
+                            const otherButton = document.querySelector(`button[data-menu="${otherSubmenu.id}"]`);
+                            otherButton?.querySelector('[data-lucide="chevron-down"]')?.classList.remove('rotate-180');
+                         }
+                     });
+                    
+                    if (isOpening) {
+                        submenu.classList.remove('hidden');
+                        icon?.classList.add('rotate-180');
+                    } else {
+                        submenu.classList.add('hidden');
+                        icon?.classList.remove('rotate-180');
+                    }
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>

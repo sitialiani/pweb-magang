@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Dokumen - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-[#7c9dab] text-white flex flex-col p-4 fixed h-full shadow-lg">
+            <!-- Profile Photo & Info Admin -->
+            <div class="text-center py-4 border-b border-white/20">
+                <img src="https://placehold.co/100x100/E7EEF0/5c7a89?text=Admin" alt="Foto Profil Admin" class="rounded-lg w-24 h-24 mx-auto mb-3 border-4 border-white/30">
+                <h3 class="font-bold text-lg">Admin Sistem</h3>
+                <p class="text-sm">Administrator</p>
+            </div>
+
+            <!-- Navigation Links Admin -->
+            <nav class="mt-6 flex-grow overflow-y-auto pr-2">
+              <ul class="space-y-1 pb-4">
+                <li><a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md hover:bg-sidebar-hover"><i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard</a></li>
+                <li>
+                  <button class="w-full flex justify-between items-center px-4 py-3 hover:bg-sidebar-hover rounded-md" data-menu="konten">
+                    <span class="flex items-center gap-3"><i data-lucide="message-square"></i> Konten & Komunikasi</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 rotate-180"></i>
+                  </button>
+                  <div id="konten" class="pl-8 pt-1 space-y-1">
+                    <a href="/admin/pengumuman" class="block px-4 py-2.5 rounded-md bg-sidebar-hover text-sm">Pengumuman</a>
+                    <a href="/admin/template-dokumen" class="block px-4 py-2.5 rounded-md active:bg-sidebar-active text-sm">Template Dokumen</a>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+            <!-- Logout -->
+            <div class="mt-auto pt-4 border-t border-white/20">
+                <a href="/logout" class="flex items-center gap-3 w-fit mx-auto px-6 py-2.5 rounded-md bg-red-600/80 hover:bg-red-700/80 transition-colors duration-200">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-72 p-8 w-full bg-gray-100">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Template Dokumen</h1>
+                <p class="text-gray-600">Kelola template dokumen untuk sistem magang</p>
+            </div>
+
+            <!-- Flash Messages -->
+            <% if (messages && messages.success) { %>
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                    <%= messages.success %>
+                </div>
+            <% } %>
+            <% if (messages && messages.error) { %>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                    <%= messages.error %>
+                </div>
+            <% } %>
+
+            <!-- Add Template Button -->
+            <div class="mb-6">
+                <button onclick="openAddModal()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold flex items-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                    Tambah Template Baru
+                </button>
+            </div>
+
+            <!-- Template List -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 border-b">
+                            <tr>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Template</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Upload</th>
+                                <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <% if (templates && templates.length > 0) { %>
+                                <% templates.forEach(function(template) { %>
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900"><%= template.nama %></div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="text-sm text-gray-900"><%= template.deskripsi || '-' %></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><%= template.file_name %></div>
+                                            <div class="text-xs text-gray-500"><%= (template.file_size / 1024).toFixed(2) %> KB</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= template.status === 'aktif' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>">
+                                                <%= template.status === 'aktif' ? 'Aktif' : 'Nonaktif' %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <%= new Date(template.created_at).toLocaleDateString('id-ID') %>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="/admin/template-dokumen/download/<%= template.id %>" class="text-blue-600 hover:text-blue-900 mr-3">
+                                                <i data-lucide="download" class="w-4 h-4 inline"></i> Download
+                                            </a>
+                                            <button onclick="editTemplate(<%= template.id %>)" class="text-green-600 hover:text-green-900 mr-3">
+                                                <i data-lucide="edit" class="w-4 h-4 inline"></i> Edit
+                                            </button>
+                                            <button onclick="deleteTemplate(<%= template.id %>)" class="text-red-600 hover:text-red-900">
+                                                <i data-lucide="trash-2" class="w-4 h-4 inline"></i> Hapus
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                        Belum ada template dokumen yang tersedia.
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Template Modal -->
+    <div id="addTemplateModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Tambah Template Baru</h3>
+                <form id="addTemplateForm" method="POST" action="/admin/template-dokumen/tambah" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Template *</label>
+                        <input type="text" name="nama" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                        <textarea name="deskripsi" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">File Template *</label>
+                        <input type="file" name="file" accept=".doc,.docx,.pdf" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        <p class="text-xs text-gray-500 mt-1">Format yang didukung: .doc, .docx, .pdf (Maks. 10MB)</p>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <button type="button" onclick="closeAddModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                            Batal
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Template Modal -->
+    <div id="editTemplateModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Edit Template</h3>
+                <form id="editTemplateForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="editTemplateId" name="id">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nama Template *</label>
+                        <input type="text" id="editNama" name="nama" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
+                        <textarea id="editDeskripsi" name="deskripsi" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select id="editStatus" name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="aktif">Aktif</option>
+                            <option value="nonaktif">Nonaktif</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">File Template (Opsional)</label>
+                        <input type="file" name="file" accept=".doc,.docx,.pdf" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <p class="text-xs text-gray-500 mt-1">Biarkan kosong jika tidak ingin mengubah file</p>
+                    </div>
+                    <div class="flex justify-end gap-3">
+                        <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">
+                            Batal
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Modal functions
+        function openAddModal() {
+            document.getElementById('addTemplateModal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addTemplateModal').classList.add('hidden');
+            document.getElementById('addTemplateForm').reset();
+        }
+
+        function openEditModal() {
+            document.getElementById('editTemplateModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editTemplateModal').classList.add('hidden');
+            document.getElementById('editTemplateForm').reset();
+        }
+
+        async function editTemplate(id) {
+            try {
+                const response = await fetch(`/admin/template-dokumen/${id}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const template = result.data;
+                    document.getElementById('editTemplateId').value = template.id;
+                    document.getElementById('editNama').value = template.nama;
+                    document.getElementById('editDeskripsi').value = template.deskripsi || '';
+                    document.getElementById('editStatus').value = template.status;
+                    openEditModal();
+                } else {
+                    alert('Gagal mengambil data template: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengambil data template.');
+            }
+        }
+
+        async function deleteTemplate(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus template ini?')) {
+                try {
+                    const response = await fetch(`/admin/template-dokumen/delete/${id}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        alert('Template berhasil dihapus.');
+                        location.reload();
+                    } else {
+                        alert('Gagal menghapus template: ' + result.message);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat menghapus template.');
+                }
+            }
+        }
+
+        // Edit form submission
+        document.getElementById('editTemplateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const id = document.getElementById('editTemplateId').value;
+            
+            try {
+                const response = await fetch(`/admin/template-dokumen/update/${id}`, {
+                    method: 'PUT',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Template berhasil diupdate.');
+                    closeEditModal();
+                    location.reload();
+                } else {
+                    alert('Gagal mengupdate template: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengupdate template.');
+            }
+        });
+
+        // Close modals when clicking outside
+        document.getElementById('addTemplateModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddModal();
+            }
+        });
+
+        document.getElementById('editTemplateModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
+        });
+    </script>
+</body>
+</html>
